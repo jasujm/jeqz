@@ -15,10 +15,13 @@
         "axios": "^0.21.1",
         "bootstrap": "^4.6.0",
         "chai": "^4.3.4",
+        "lodash": "^4.17.21",
         "react": "^17.0.2",
         "react-bootstrap": "^1.5.2",
         "react-dom": "^17.0.2",
+        "react-mathjax": "^1.0.1",
         "react-scripts": "4.0.3",
+        "remove": "^0.1.5",
         "sass": "^1.32.12",
         "typescript": "^4.2.4",
         "web-vitals": "^1.1.1"
@@ -33,7 +36,10 @@
         "extends": [
             "react-app",
             "react-app/jest"
-        ]
+        ],
+        "rules": {
+            "jest/valid-expect": "off"
+        }
     },
     "browserslist": {
         "production": [
@@ -46,5 +52,11 @@
             "last 1 firefox version",
             "last 1 safari version"
         ]
+    },
+    "devDependencies": {
+        "@types/chai-dom": "0.0.10",
+        "@types/react-mathjax": "^1.0.0",
+        "axios-mock-adapter": "^1.19.0",
+        "chai-dom": "^1.9.0"
     }
 }

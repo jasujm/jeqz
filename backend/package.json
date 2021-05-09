@@ -4,7 +4,7 @@
   "description": "Jaakko's equation quiz backend",
   "private": true,
   "scripts": {
-    "start": "ts-node src/app",
+    "start": "ts-node server",
     "lint": "eslint src/",
     "test": "jest"
   },
@@ -17,20 +17,34 @@
   "devDependencies": {
     "@tsconfig/node14": "^1.0.0",
     "@types/chai": "^4.2.17",
+    "@types/chai-http": "^4.2.0",
+    "@types/faker": "^5.5.5",
     "@types/jest": "^26.0.23",
     "@types/koa": "^2.13.1",
     "@types/koa__cors": "^3.0.2",
+    "@types/koa__router": "^8.0.4",
+    "@types/lodash": "^4.14.169",
+    "@types/supertest": "^2.0.11",
+    "@types/uuid": "^8.3.0",
     "@typescript-eslint/eslint-plugin": "^4.22.0",
     "@typescript-eslint/parser": "^4.22.0",
     "chai": "^4.3.4",
+    "chai-http": "^4.3.0",
     "eslint": "^7.25.0",
+    "faker": "^5.5.3",
     "jest": "^26.6.3",
+    "sqlite3": "^5.0.2",
     "ts-jest": "^26.5.5",
     "ts-node": "^9.1.1",
     "typescript": "^4.2.4"
   },
   "dependencies": {
     "@koa/cors": "^3.1.0",
-    "koa": "^2.13.1"
+    "@koa/router": "^10.0.0",
+    "knex": "^0.95.5",
+    "koa": "^2.13.1",
+    "lodash": "^4.17.21",
+    "objection": "^2.2.15",
+    "pg": "^8.6.0"
   }
 }
