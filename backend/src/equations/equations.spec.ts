@@ -21,7 +21,9 @@ describe("equations", () => {
   describe("read", () => {
     it("should read a single equation", async () => {
       const equation = equations[0];
-      const res = await request(app.callback()).get(`/equations/${equation.id}`);
+      const res = await request(app.callback()).get(
+        `/equations/${equation.id}`
+      );
       expect(res).to.have.status(200).and.to.be.json;
       expect(res.body).to.deep.equal(equation);
     });

@@ -55,6 +55,7 @@
     },
     "devDependencies": {
         "@types/chai-dom": "0.0.10",
+        "@types/lodash": "^4.14.169",
         "@types/react-mathjax": "^1.0.0",
         "axios-mock-adapter": "^1.19.0",
         "chai-dom": "^1.9.0"
