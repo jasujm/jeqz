@@ -1,2 +1,2 @@
 export { default as router } from "./routes";
-export { Quiz } from "./models";
+export { Question, Choice } from "./models";

@@ -1,10 +1,8 @@
 import React from "react";
 import MathJax from "react-mathjax";
+import { Equation as ApiEquation } from "../api";
 
-export type EquationProps = {
-  name?: string;
-  markup: string;
-};
+export type EquationProps = ApiEquation;
 
 export default function Equation({ name, markup }: EquationProps) {
   return (

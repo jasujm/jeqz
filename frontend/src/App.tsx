@@ -1,30 +1,20 @@
 import React, { useEffect } from "react";
 import "./App.scss";
-import axios from "axios";
-import Question, { QuestionProps } from "./components/Question";
-
-const client = axios.create({
-  baseURL: "http://localhost:3030",
-  timeout: 1000,
-});
+import Quiz, { QuizProps } from "./components/Quiz";
+import { createQuiz } from "./api";
 
 export default function App() {
-  const [question, setQuestion] = React.useState<QuestionProps | null>(null);
+  const [quiz, setQuiz] = React.useState<QuizProps | null>(null);
 
   useEffect(() => {
-    void client
-      .post("/quizzes")
-      .then((response) => {
-        setQuestion(response.data.currentQuestion || null);
-      })
-      .catch((err) => {
-        console.error(err);
-      });
+    void createQuiz()
+      .then(setQuiz)
+      .catch(console.error);
   }, []);
 
   return (
     <div className="app">
-      {question ? <Question {...question} /> : <span>Loading question...</span>}
+      {quiz ? <Quiz {...quiz} /> : <span>Creating quiz...</span>}
     </div>
   );
 }

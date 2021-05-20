@@ -1,3 +1,20 @@
-.question .choices {
-  text-align: left;
+.question {
+  .equation {
+    margin-bottom: 0.5rem;
+  }
+  .choices {
+    text-align: left;
+
+    .choice {
+      &.selected {
+        font-weight: bold;
+      }
+      &.correct label {
+        color: var(--success);
+      }
+      &.incorrect.selected label {
+        color: var(--danger);
+      }
+    }
+  }
 }

@@ -1,6 +1,7 @@
 import { expect } from "../test/helpers";
 import "../test/db";
-import { Quiz, Question, Choice } from "./models";
+import { Quiz } from "./models";
+import { Question, Choice } from "../questions";
 import _ from "lodash";
 
 describe("quizzes/models", () => {
@@ -46,7 +47,7 @@ describe("quizzes/models", () => {
           await Choice.query().where("questionId", question.id).orderBy("rank")
         ).map((choice) => ({
           ...choice,
-          isCorrect: Boolean(choice.isCorrect), // cast to boolean because the DB driver returns number
+          isCorrect: !!choice.isCorrect, // cast to boolean because the DB driver returns number
         }));
         expect(choicesFromDb).to.deep.equal(choices);
       });

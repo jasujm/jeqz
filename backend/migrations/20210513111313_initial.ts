@@ -19,6 +19,7 @@ export async function up(knex: Knex): Promise<void> {
     table.uuid("equationId").notNullable();
     table.integer("rank").notNullable();
     table.boolean("isCorrect").notNullable();
+    table.boolean("isSelected").nullable();
     table.primary(["questionId", "equationId"]);
   });
 }

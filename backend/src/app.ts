@@ -3,6 +3,7 @@ import cors from "@koa/cors";
 
 import { router as equationsRouter } from "./equations";
 import { router as quizzesRouter } from "./quizzes";
+import { router as questionsRouter } from "./questions";
 
 import "./db";
 
@@ -18,6 +19,8 @@ app
   .use(equationsRouter.routes())
   .use(equationsRouter.allowedMethods())
   .use(quizzesRouter.routes())
-  .use(quizzesRouter.allowedMethods());
+  .use(quizzesRouter.allowedMethods())
+  .use(questionsRouter.routes())
+  .use(questionsRouter.allowedMethods());
 
 export default app;
