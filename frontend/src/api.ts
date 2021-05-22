@@ -6,16 +6,20 @@ export type Equation = {
 };
 
 export type Choice = {
-  value: string;
+  id: string;
   label: string;
-  isSelected?: boolean;
-  isCorrect?: boolean;
+};
+
+export type Answer = {
+  choiceId: string;
 };
 
 export type Question = {
   id: string;
   equation: Equation;
   choices: Choice[];
+  answer?: Answer;
+  correctAnswer?: Answer;
 };
 
 export type Quiz = {
@@ -38,10 +42,6 @@ export async function getQuestion(questionId: string) {
   return response.data as Question;
 }
 
-export async function answerQuestion(questionId: string, answer: string) {
-  void (await client.post(
-    `/questions/${questionId}/answer`,
-    {},
-    { params: { answer } }
-  ));
+export async function answerQuestion(questionId: string, choiceId: string) {
+  void (await client.put(`/questions/${questionId}/answer`, { choiceId }));
 }

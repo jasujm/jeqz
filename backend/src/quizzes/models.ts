@@ -41,9 +41,9 @@ export class Quiz extends Model {
     return await this.$relatedQuery<Question>("questions").insertGraph({
       id: uuidv4(),
       rank: _.toInteger(_.head(highestRank)?.rank) + 1,
-      choices: randomEquations.map((equation, index) => ({
+      choices: randomEquations.map((equation) => ({
+        id: uuidv4(),
         equationId: equation.id,
-        rank: index + 1,
         isCorrect: equation.id === correctEquationId,
       })),
     });

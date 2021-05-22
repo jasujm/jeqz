@@ -4,7 +4,7 @@ import { render, screen, act, fireEvent } from "@testing-library/react";
 import { expect } from "../test/helpers";
 import sinon, { SinonStub } from "sinon";
 import * as api from "../api";
-import { props as question } from "./Question.spec";
+import { question } from "./Question.spec";
 
 const quizId = "c532b5ce-aa11-4733-b43f-b26bc94168b6";
 
@@ -35,6 +35,6 @@ describe("Quiz", () => {
     await act(async () => {
       fireEvent.click(input);
     });
-    expect(answerQuestion).to.have.been.calledWith(question.id, choice.value);
+    expect(answerQuestion).to.have.been.calledWith(question.id, choice.id);
   });
 });

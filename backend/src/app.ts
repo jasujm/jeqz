@@ -1,5 +1,6 @@
 import Koa from "koa";
 import cors from "@koa/cors";
+import bodyParser from "koa-bodyparser";
 
 import { router as equationsRouter } from "./equations";
 import { router as quizzesRouter } from "./quizzes";
@@ -16,6 +17,7 @@ if (isDevelopment) {
 }
 
 app
+  .use(bodyParser())
   .use(equationsRouter.routes())
   .use(equationsRouter.allowedMethods())
   .use(quizzesRouter.routes())

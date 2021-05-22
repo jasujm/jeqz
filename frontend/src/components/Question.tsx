@@ -3,45 +3,46 @@ import Equation from "./Equation";
 import { Form } from "react-bootstrap";
 import "./Question.scss";
 import classnames from "classnames";
-import { Question as ApiQuestion, Choice } from "../api";
+import { Question as ApiQuestion, Choice, Answer } from "../api";
 
-export type QuestionProps = ApiQuestion & {
+export type QuestionProps = {
+  question: ApiQuestion;
   onAnswer: (choiceId: string) => void;
 };
 
-function getChoiceClasses(choice: Choice) {
+function getChoiceClasses(
+  choice: Choice,
+  answer?: Answer,
+  correctAnswer?: Answer
+) {
   return classnames("choice", {
-    correct: choice.isCorrect === true,
-    incorrect: choice.isCorrect === false,
-    selected: choice.isSelected,
+    correct: correctAnswer && correctAnswer.choiceId === choice.id,
+    incorrect: correctAnswer && correctAnswer.choiceId !== choice.id,
+    selected: answer?.choiceId === choice.id,
   });
 }
 
 export default function Question({
-  id,
-  equation,
-  choices,
+  question: { id, equation, choices, answer, correctAnswer },
   onAnswer,
 }: QuestionProps) {
-  const isAnswered = choices.some((choice) => choice.isSelected);
   return (
     <div className="question">
       <h2>What is this equation?</h2>
       {equation ? <Equation {...equation} /> : <span>Loading equation</span>}
       <div className="choices">
         {choices.map((choice) => {
-          const key = `question-${id}-choice-${choice.value}`;
+          const key = `question-${id}-choice-${choice.id}`;
           return (
             <Form.Check
               key={key}
               id={key}
-              className={getChoiceClasses(choice)}
+              className={getChoiceClasses(choice, answer, correctAnswer)}
               type="radio"
               label={choice.label}
-              value={choice.value}
-              disabled={isAnswered}
-              checked={choice.isSelected}
-              onChange={(event) => onAnswer(event.target.value)}
+              disabled={!!answer}
+              checked={answer?.choiceId === choice.id}
+              onChange={(event) => onAnswer(choice.id)}
             />
           );
         })}

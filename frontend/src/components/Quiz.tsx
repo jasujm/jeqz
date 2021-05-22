@@ -13,21 +13,17 @@ export default function Quiz({ questionId }: QuizProps) {
   const [question, setQuestion] = React.useState<ApiQuestion | null>(null);
 
   function refresh() {
-    void getQuestion(questionId)
-      .then(setQuestion)
-      .catch(console.error);
+    void getQuestion(questionId).then(setQuestion).catch(console.error);
   }
 
   function postAnswer(answer: string) {
-    void answerQuestion(questionId, answer)
-      .then(refresh)
-      .catch(console.error);
+    void answerQuestion(questionId, answer).then(refresh).catch(console.error);
   }
 
   useEffect(refresh, [questionId]);
 
   if (question) {
-    return <Question onAnswer={postAnswer} {...question} />;
+    return <Question onAnswer={postAnswer} question={question} />;
   }
   return <span>Loading question...</span>;
 }

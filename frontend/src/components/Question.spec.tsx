@@ -4,21 +4,18 @@ import Question from "./Question";
 import { expect } from "../test/helpers";
 import sinon, { SinonFake } from "sinon";
 
-export const props = {
+export const question = {
   id: "4374bc8e-97ad-4ec7-a2c2-e219a1d10748",
   equation: { markup: "a + b = c" },
   choices: [
-    { value: "1", label: "Awesome equation" },
-    { value: "2", label: "Terrific equation" },
-    { value: "3", label: "Just another equation" },
+    { id: "2c68d592-6c9d-4400-b84a-45499288d90e", label: "Awesome equation" },
+    { id: "c01b89c6-a35d-4bc7-bc9b-96b744013bc9", label: "Terrific equation" },
+    {
+      id: "3b2b3599-36f6-4d89-a032-c420adf08527",
+      label: "Just another equation",
+    },
   ],
 };
-
-const answeredChoices = props.choices.map((choice) => ({
-  ...choice,
-  isSelected: choice.value === "1",
-  isCorrect: choice.value === "2",
-}));
 
 describe("Question", () => {
   describe("unanswered", () => {
@@ -26,14 +23,14 @@ describe("Question", () => {
 
     beforeEach(() => {
       onAnswer = sinon.fake();
-      render(<Question {...props} onAnswer={onAnswer} />);
+      render(<Question question={question} onAnswer={onAnswer} />);
     });
 
     it("should contain equation", () => {
       expect(document.querySelectorAll(".equation")).to.exist;
     });
 
-    props.choices.forEach((choice) => {
+    question.choices.forEach((choice) => {
       it(`should contain choice: ${choice.label}`, () => {
         const input = screen.getByLabelText(choice.label);
         expect(input).to.exist;
@@ -48,17 +45,25 @@ describe("Question", () => {
     });
 
     it("should trigger answered event", async () => {
-      const choice = props.choices[0];
+      const choice = question.choices[0];
       const input = screen.getByLabelText(choice.label);
       fireEvent.click(input);
-      expect(onAnswer).to.have.been.calledWith(choice.value);
+      expect(onAnswer).to.have.been.calledWith(choice.id);
     });
   });
 
   describe("answered", () => {
     beforeEach(() => {
-      const answeredProps = { ...props, choices: answeredChoices };
-      render(<Question {...answeredProps} />);
+      const answeredQuestion = {
+        ...question,
+        answer: {
+          choiceId: question.choices[0].id,
+        },
+        correctAnswer: {
+          choiceId: question.choices[1].id,
+        },
+      };
+      render(<Question question={answeredQuestion} />);
     });
 
     it("should have choices disabled", async () => {

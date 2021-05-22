@@ -30,11 +30,6 @@ describe("quizzes/models", () => {
       expect(question.quizId).to.be.equal(quiz.id);
     });
 
-    it("should be created with increasing rank", async () => {
-      const otherQuestion = await quiz.createQuestion(4);
-      expect(otherQuestion.rank).to.be.equal(question.rank + 1);
-    });
-
     describe("choices", () => {
       let choices!: Choice[];
 
@@ -44,12 +39,12 @@ describe("quizzes/models", () => {
 
       it("should be included in the related question", async () => {
         const choicesFromDb = (
-          await Choice.query().where("questionId", question.id).orderBy("rank")
+          await Choice.query().where("questionId", question.id)
         ).map((choice) => ({
           ...choice,
           isCorrect: !!choice.isCorrect, // cast to boolean because the DB driver returns number
         }));
-        expect(choicesFromDb).to.deep.equal(choices);
+        expect(choicesFromDb).to.deep.equalInAnyOrder(choices);
       });
 
       it("should have exactly one correct choice", () => {

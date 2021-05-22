@@ -15,12 +15,12 @@ export async function up(knex: Knex): Promise<void> {
     table.integer("rank").notNullable();
   });
   await knex.schema.createTable("choices", (table) => {
+    table.uuid("id").notNullable().primary();
     table.uuid("questionId").notNullable();
     table.uuid("equationId").notNullable();
-    table.integer("rank").notNullable();
     table.boolean("isCorrect").notNullable();
     table.boolean("isSelected").nullable();
-    table.primary(["questionId", "equationId"]);
+    table.unique(["questionId", "equationId"]);
   });
 }
 

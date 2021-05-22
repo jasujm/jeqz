@@ -7,9 +7,7 @@ export default function App() {
   const [quiz, setQuiz] = React.useState<QuizProps | null>(null);
 
   useEffect(() => {
-    void createQuiz()
-      .then(setQuiz)
-      .catch(console.error);
+    void createQuiz().then(setQuiz).catch(console.error);
   }, []);
 
   return (

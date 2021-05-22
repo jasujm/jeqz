@@ -10,20 +10,16 @@ function makeEquationResponse(equation: Equation, isAnswered: boolean) {
   return _.pick(equation, keys);
 }
 
-function makeChoiceResponse(choice: Choice, isAnswered: boolean) {
+function makeChoiceResponse(choice: Choice) {
   return {
-    value: _.toString(choice.rank),
+    id: choice.id,
     label: choice.equation.name,
-    ...(isAnswered
-      ? { isSelected: !!choice.isSelected, isCorrect: !!choice.isCorrect }
-      : {}),
   };
 }
 
 async function makeQuestionResponse(question: Question) {
   const choices = await question
     .$relatedQuery("choices")
-    .orderBy("rank")
     .withGraphJoined("equation");
   const correctChoice = choices.find((choice) => choice.isCorrect);
   const isAnswered = choices.some((choice) => choice.isSelected);
@@ -32,7 +28,17 @@ async function makeQuestionResponse(question: Question) {
     quizId: question.quizId,
     equation:
       correctChoice && makeEquationResponse(correctChoice.equation, isAnswered),
-    choices: choices.map((choice) => makeChoiceResponse(choice, isAnswered)),
+    choices: choices.map((choice) => makeChoiceResponse(choice)),
+    ...(isAnswered
+      ? {
+          answer: {
+            choiceId: choices.find((choice) => choice.isSelected)?.id,
+          },
+          correctAnswer: {
+            choiceId: choices.find((choice) => choice.isCorrect)?.id,
+          },
+        }
+      : {}),
   };
 }
 
@@ -56,6 +62,26 @@ router.post("question_answer", "/:id/answer", async (ctx) => {
   }
   try {
     await question.answer(answer);
+    ctx.status = 204;
+  } catch (err) {
+    ctx.body = err.message;
+    ctx.status = 409;
+  }
+});
+
+router.put("question_answer_update", "/:id/answer", async (ctx) => {
+  const question = await Question.query().findById(ctx.params.id);
+  if (!question) {
+    return;
+  }
+  const choiceId = ctx.request.body?.choiceId;
+  if (typeof choiceId !== "string") {
+    ctx.body = "Invalid answer";
+    ctx.status = 422;
+    return;
+  }
+  try {
+    await question.answer(choiceId);
     ctx.status = 204;
   } catch (err) {
     ctx.body = err.message;

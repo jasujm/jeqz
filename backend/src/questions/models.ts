@@ -1,7 +1,6 @@
 import { Model, RelationMappings, raw } from "objection";
 import { Quiz } from "../quizzes";
 import { Equation } from "../equations";
-import _ from "lodash";
 
 export class Question extends Model {
   id!: string;
@@ -46,34 +45,31 @@ export class Question extends Model {
     };
   }
 
-  async answer(choiceRank: number | string): Promise<void> {
-    const intendedChoice = _.head(
-      await this.$relatedQuery("choices")
-        .select("isSelected")
-        .where("rank", choiceRank)
-    );
+  async answer(choiceId: string): Promise<void> {
+    const intendedChoice = await this.$relatedQuery("choices")
+      .findById(choiceId)
+      .select("isSelected");
     if (!intendedChoice) {
-      throw new Error(`Question ${this.id} does not have choice ${this.rank}`);
+      throw new Error(`Question ${this.id} does not have choice ${choiceId}`);
     } else if (intendedChoice.isSelected !== null) {
       throw new Error(`Question ${this.id} is already answered`);
     }
-    await this.$relatedQuery("choices").patch({
-      isSelected: raw("?? = ?", "rank", choiceRank),
-    });
+    void (await this.$relatedQuery("choices").patch({
+      isSelected: raw("?? = ?", "id", choiceId),
+    }));
   }
 }
 
 export class Choice extends Model {
+  id!: string;
   questionId!: string;
   equationId!: string;
-  rank!: number;
   isCorrect!: boolean;
   isSelected: boolean | null = null;
   question!: Question;
   equation!: Equation;
 
   static tableName = "choices";
-  static idColumn = ["questionId", "equationId"];
 
   static relationMappings = {
     question: {
