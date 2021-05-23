@@ -17,7 +17,7 @@ function makeChoiceResponse(choice: Choice) {
   };
 }
 
-async function makeQuestionResponse(question: Question) {
+export async function makeQuestionResponse(question: Question) {
   const choices = await question
     .$relatedQuery("choices")
     .withGraphJoined("equation");

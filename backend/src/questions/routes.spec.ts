@@ -31,7 +31,7 @@ describe("questions/routes", () => {
       res = await getQuestion(question.id);
     });
 
-    it("should respond with the correct status code", () => {
+    it("should respond with status 200", () => {
       expect(res).to.have.status(200);
     });
 
@@ -45,7 +45,7 @@ describe("questions/routes", () => {
     });
   });
 
-  it("should respond with 404 if reading a question is not found", async () => {
+  it("should respond with 404 when the question does not exist", async () => {
     const res = await getQuestion("fake");
     expect(res).to.have.status(404);
   });
@@ -59,7 +59,7 @@ describe("questions/routes", () => {
       res = await answerQuestion(question.id, choiceId);
     });
 
-    it("should respond with the correct status code", () => {
+    it("should respond with 204", () => {
       expect(res).to.have.status(204);
     });
 
@@ -75,12 +75,12 @@ describe("questions/routes", () => {
     });
   });
 
-  it("should respond with 404 if answering a question not found", async () => {
+  it("should respond with 404 when answering a question that does not exist", async () => {
     const res = await request(app.callback()).put("/questions/fake/answer");
     expect(res).to.have.status(404);
   });
 
-  it("should respond with 422 if answering question with incorrect body", async () => {
+  it("should respond with 422 when answering with malformed request", async () => {
     const res = await request(app.callback()).put(
       `/questions/${question.id}/answer`
     );

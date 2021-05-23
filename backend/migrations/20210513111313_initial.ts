@@ -13,6 +13,7 @@ export async function up(knex: Knex): Promise<void> {
     table.uuid("id").notNullable().primary();
     table.uuid("quizId").notNullable();
     table.integer("rank").notNullable();
+    table.unique(["quizId", "rank"]);
   });
   await knex.schema.createTable("choices", (table) => {
     table.uuid("id").notNullable().primary();

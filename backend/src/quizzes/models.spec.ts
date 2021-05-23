@@ -53,6 +53,16 @@ describe("quizzes/models", () => {
           true: 1,
         });
       });
+
+      it("should allow creating question if the previous is answered", async () => {
+        const choice = _.head(choices) as Choice;
+        await question.answer(choice.id);
+        return expect(quiz.createQuestion()).to.be.fulfilled;
+      });
+    });
+
+    it("should not allow creating question if the previous is unanswered", () => {
+      return expect(quiz.createQuestion()).to.be.rejected;
     });
   });
 });

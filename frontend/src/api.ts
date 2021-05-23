@@ -24,7 +24,6 @@ export type Question = {
 
 export type Quiz = {
   id: string;
-  questionId: string;
 };
 
 const client = axios.create({
@@ -35,6 +34,11 @@ const client = axios.create({
 export async function createQuiz() {
   const response = await client.post("/quizzes");
   return response.data as Quiz;
+}
+
+export async function createQuestion(quizId: string) {
+  const response = await client.post(`/quizzes/${quizId}/questions`);
+  return response.data as Question;
 }
 
 export async function getQuestion(questionId: string) {

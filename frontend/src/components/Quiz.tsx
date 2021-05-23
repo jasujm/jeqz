@@ -1,29 +1,61 @@
 import React, { useEffect } from "react";
 import Question from "./Question";
 import {
+  createQuestion,
   getQuestion,
   answerQuestion,
   Question as ApiQuestion,
   Quiz as ApiQuiz,
 } from "../api";
+import { Button } from "react-bootstrap";
 
-export type QuizProps = ApiQuiz;
+export type QuizProps = {
+  quiz: ApiQuiz;
+};
 
-export default function Quiz({ questionId }: QuizProps) {
+export default function Quiz({ quiz }: QuizProps) {
   const [question, setQuestion] = React.useState<ApiQuestion | null>(null);
 
-  function refresh() {
-    void getQuestion(questionId).then(setQuestion).catch(console.error);
+  async function postAnswer(choiceId: string) {
+    if (question) {
+      try {
+        await answerQuestion(question.id, choiceId);
+        const refreshedQuestion = await getQuestion(question.id);
+        setQuestion(refreshedQuestion);
+      } catch (err) {
+        console.error(err);
+      }
+    }
   }
 
-  function postAnswer(answer: string) {
-    void answerQuestion(questionId, answer).then(refresh).catch(console.error);
+  async function nextQuestion() {
+    try {
+      const question = await createQuestion(quiz.id);
+      setQuestion(question);
+    } catch (err) {
+      console.error(err);
+    }
   }
 
-  useEffect(refresh, [questionId]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  useEffect(() => {
+    void nextQuestion();
+  }, [quiz.id]);
 
   if (question) {
-    return <Question onAnswer={postAnswer} question={question} />;
+    return (
+      <div className="quiz">
+        <Question onAnswer={postAnswer} question={question} />
+        <Button
+          variant="primary"
+          block
+          disabled={!question.answer}
+          onClick={nextQuestion}
+        >
+          Next question
+        </Button>
+      </div>
+    );
   }
   return <span>Loading question...</span>;
 }

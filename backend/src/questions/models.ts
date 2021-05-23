@@ -45,6 +45,10 @@ export class Question extends Model {
     };
   }
 
+  isAnswered() {
+    return this.choices?.every((choice) => choice.isSelected !== null);
+  }
+
   async answer(choiceId: string): Promise<void> {
     const intendedChoice = await this.$relatedQuery("choices")
       .findById(choiceId)
