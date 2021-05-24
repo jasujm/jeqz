@@ -36,6 +36,11 @@ export async function createQuiz() {
   return response.data as Quiz;
 }
 
+export async function getQuizQuestions(quizId: string) {
+  const response = await client.get(`/quizzes/${quizId}/questions`);
+  return response.data as Question[];
+}
+
 export async function createQuestion(quizId: string) {
   const response = await client.post(`/quizzes/${quizId}/questions`);
   return response.data as Question;

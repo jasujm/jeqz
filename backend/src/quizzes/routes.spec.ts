@@ -6,7 +6,7 @@ import { Question, Choice } from "../questions";
 import _ from "lodash";
 
 describe("quizzes/routes", () => {
-  describe("create/read", () => {
+  describe("create quiz", () => {
     let res!: ChaiHttp.Response;
     let quizId!: string;
 
@@ -20,18 +20,15 @@ describe("quizzes/routes", () => {
     });
 
     it("should respond with the location of the quiz", async () => {
-      expect(res).to.have.header("Location");
-      expect(
-        await request(app.callback()).get(res.header.location)
-      ).to.have.status(200);
+      expect(res.header.location).to.include(quizId);
     });
 
-    it("should create quiz in the database", async () => {
+    it("should create the quiz in the database", async () => {
       expect(await Quiz.query().findById(quizId)).not.to.be.undefined;
     });
   });
 
-  describe("create questions", () => {
+  describe("quizzes", () => {
     let quiz!: Quiz;
     let question!: Question;
     let choice!: Choice;
@@ -42,37 +39,73 @@ describe("quizzes/routes", () => {
       choice = _.head(question.choices) as Choice;
     });
 
-    describe("when the previous question is answered", () => {
+    describe("read", () => {
       let res!: ChaiHttp.Response;
 
       beforeEach(async () => {
-        await question.answer(choice.id);
-        res = await request(app.callback()).post(
+        res = await request(app.callback()).get(`/quizzes/${quiz.id}`);
+      });
+
+      it("should respond with status 200", () => {
+        expect(res).to.have.status(200);
+      });
+
+      it("should respond with the representation of the quiz", () => {
+        expect(res.body).to.deep.equal(quiz);
+      });
+    });
+
+    describe("read questions", () => {
+      let res!: ChaiHttp.Response;
+
+      beforeEach(async () => {
+        res = await request(app.callback()).get(
           `/quizzes/${quiz.id}/questions`
         );
       });
 
-      it("should respond with status 201", () => {
-        expect(res).to.have.status(201);
+      it("should respond with status 200", () => {
+        expect(res).to.have.status(200);
       });
 
-      it("should respond with the location of the new question", async () => {
-        expect(res).to.have.header("Location");
-        expect(
-          await request(app.callback()).get(res.header.location)
-        ).to.have.status(200);
-      });
-
-      it("should respond with representation of the new question", async () => {
-        expect(res.body.id).to.exist.and.not.equal(question.id);
+      it("should have questions", () => {
+        const questions = res.body as Question[];
+        expect(questions?.map((question) => question.id)).to.deep.equal([
+          question.id,
+        ]);
       });
     });
 
-    it("should respond with 409 if the previous question is not answered", async () => {
-      const res = await request(app.callback()).post(
-        `/quizzes/${quiz.id}/questions`
-      );
-      expect(res).to.have.status(409);
+    describe("create questions", () => {
+      describe("when the previous question is answered", () => {
+        let res!: ChaiHttp.Response;
+
+        beforeEach(async () => {
+          await question.answer(choice.id);
+          res = await request(app.callback()).post(
+            `/quizzes/${quiz.id}/questions`
+          );
+        });
+
+        it("should respond with status 201", () => {
+          expect(res).to.have.status(201);
+        });
+
+        it("should respond with the location of the new question", async () => {
+          expect(res.header.location).to.include(res.body.id);
+        });
+
+        it("should respond with representation of the new question", async () => {
+          expect(res.body.id).to.exist.and.not.equal(question.id);
+        });
+      });
+
+      it("should respond with 409 if the previous question is not answered", async () => {
+        const res = await request(app.callback()).post(
+          `/quizzes/${quiz.id}/questions`
+        );
+        expect(res).to.have.status(409);
+      });
     });
   });
 });

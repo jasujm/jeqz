@@ -1,4 +1,4 @@
-import { Model, RelationMappings, raw } from "objection";
+import { Model, RelationMappings, raw, QueryBuilder } from "objection";
 import { Quiz } from "../quizzes";
 import { Equation } from "../equations";
 
@@ -45,7 +45,13 @@ export class Question extends Model {
     };
   }
 
-  isAnswered() {
+  static modifiers = {
+    defaultOrder(query: QueryBuilder<Question>): void {
+      query.orderBy("rank");
+    },
+  };
+
+  isAnswered(): boolean | undefined {
     return this.choices?.every((choice) => choice.isSelected !== null);
   }
 
@@ -91,6 +97,12 @@ export class Choice extends Model {
         from: "choices.equationId",
         to: "equations.id",
       },
+    },
+  };
+
+  static modifiers = {
+    defaultOrder(query: QueryBuilder<Choice>): void {
+      query.orderBy("id");
     },
   };
 }

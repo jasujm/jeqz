@@ -14,12 +14,19 @@ router.post("quizzes", "/", async (ctx) => {
 router.get("quiz_details", "/:id", async (ctx) => {
   const quiz = await Quiz.query().findById(ctx.params.id);
   if (quiz) {
-    const question = await quiz.currentQuestion();
     ctx.body = quiz;
   }
 });
 
-router.post("quiz_questions", "/:id/questions", async (ctx) => {
+router.get("quiz_questions", "/:id/questions", async (ctx) => {
+  const questions = await Quiz.relatedQuery("questions")
+    .for(ctx.params.id)
+    .modify("defaultOrder")
+    .withGraphFetched("choices(defaultOrder).[equation]");
+  ctx.body = questions.map(makeQuestionResponse);
+});
+
+router.post("quiz_questions_create", "/:id/questions", async (ctx) => {
   const quiz = await Quiz.query().findById(ctx.params.id);
   if (!quiz) {
     return;
@@ -31,7 +38,7 @@ router.post("quiz_questions", "/:id/questions", async (ctx) => {
       "Location",
       questionRouter.url("question_details", { id: question.id })
     );
-    ctx.body = await makeQuestionResponse(question);
+    ctx.body = makeQuestionResponse(question);
   } catch (err) {
     ctx.body = err.message;
     ctx.status = 409;

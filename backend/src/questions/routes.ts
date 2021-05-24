@@ -17,35 +17,37 @@ function makeChoiceResponse(choice: Choice) {
   };
 }
 
-export async function makeQuestionResponse(question: Question) {
-  const choices = await question
-    .$relatedQuery("choices")
-    .withGraphJoined("equation");
+// TODO: Document API types
+export function makeQuestionResponse(
+  question: Question
+): Record<string, unknown> {
+  const choices = question.choices as Choice[];
   const correctChoice = choices.find((choice) => choice.isCorrect);
   const isAnswered = choices.some((choice) => choice.isSelected);
-  return {
+  const response = {
     id: question.id,
     quizId: question.quizId,
     equation:
       correctChoice && makeEquationResponse(correctChoice.equation, isAnswered),
     choices: choices.map((choice) => makeChoiceResponse(choice)),
-    ...(isAnswered
-      ? {
-          answer: {
-            choiceId: choices.find((choice) => choice.isSelected)?.id,
-          },
-          correctAnswer: {
-            choiceId: choices.find((choice) => choice.isCorrect)?.id,
-          },
-        }
-      : {}),
-  };
+  } as Record<string, unknown>;
+  if (isAnswered) {
+    response.answer = {
+      choiceId: choices.find((choice) => choice.isSelected)?.id,
+    };
+    response.correctAnswer = {
+      choiceId: choices.find((choice) => choice.isCorrect)?.id,
+    };
+  }
+  return response;
 }
 
 router.get("question_details", "/:id", async (ctx) => {
-  const question = await Question.query().findById(ctx.params.id);
+  const question = await Question.query()
+    .findById(ctx.params.id)
+    .withGraphFetched("choices(defaultOrder).[equation]");
   if (question) {
-    ctx.body = await makeQuestionResponse(question);
+    ctx.body = makeQuestionResponse(question);
   }
 });
 

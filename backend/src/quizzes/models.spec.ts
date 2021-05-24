@@ -39,7 +39,7 @@ describe("quizzes/models", () => {
 
       it("should be included in the related question", async () => {
         const choicesFromDb = (
-          await Choice.query().where("questionId", question.id)
+          await question.$relatedQuery("choices").withGraphFetched("equation")
         ).map((choice) => ({
           ...choice,
           isCorrect: !!choice.isCorrect, // cast to boolean because the DB driver returns number
