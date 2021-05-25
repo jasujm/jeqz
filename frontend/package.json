@@ -29,7 +29,9 @@
         "start": "react-scripts start",
         "build": "react-scripts build",
         "test": "react-scripts test",
-        "eject": "react-scripts eject"
+        "eject": "react-scripts eject",
+        "lint": "eslint src/",
+        "format": "prettier -w src"
     },
     "eslintConfig": {
         "extends": [
@@ -71,6 +73,7 @@
         "axios-mock-adapter": "^1.19.0",
         "chai": "^4.3.4",
         "chai-dom": "^1.9.0",
+        "prettier": "^2.3.0",
         "sinon": "^10.0.0",
         "sinon-chai": "^3.6.0"
     }

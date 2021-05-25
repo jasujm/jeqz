@@ -5,8 +5,10 @@
   "private": true,
   "scripts": {
     "start": "ts-node server",
+    "dev:start": "nodemon --watch 'src/**' --ext 'ts' --ignore '*.spec.ts' --exec 'ts-node server'",
     "lint": "eslint src/",
-    "test": "jest"
+    "test": "jest",
+    "format": "prettier -w src"
   },
   "keywords": [],
   "author": {
@@ -38,6 +40,8 @@
     "eslint": "^7.25.0",
     "faker": "^5.5.3",
     "jest": "^26.6.3",
+    "nodemon": "^2.0.7",
+    "prettier": "^2.3.0",
     "sqlite3": "^5.0.2",
     "ts-jest": "^26.5.5",
     "ts-node": "^9.1.1",
