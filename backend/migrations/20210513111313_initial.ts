@@ -5,6 +5,8 @@ export async function up(knex: Knex): Promise<void> {
     table.uuid("id").primary().notNullable();
     table.string("name").unique().notNullable();
     table.string("markup", 1023).notNullable();
+    table.string("wikipediaId", 31).notNullable();
+    table.dateTime("wikipediaTimestamp").notNullable();
     table.timestamps(true, true);
   });
   await knex.schema.createTable("quizzes", (table) => {

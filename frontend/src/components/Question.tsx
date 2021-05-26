@@ -29,7 +29,11 @@ export default function Question({
   return (
     <div className="question">
       <h2>What is this equation?</h2>
-      {equation ? <Equation {...equation} /> : <span>Loading equation</span>}
+      {equation ? (
+        <Equation equation={equation} />
+      ) : (
+        <span>Loading equation</span>
+      )}
       <div className="choices">
         {choices.map((choice) => {
           const key = `question-${id}-choice-${choice.id}`;

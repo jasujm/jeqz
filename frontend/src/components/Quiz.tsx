@@ -10,6 +10,7 @@ import {
 } from "../api";
 import { Button } from "react-bootstrap";
 import _ from "lodash";
+import "./Quiz.scss";
 
 export type QuizProps = {
   quiz: ApiQuiz;

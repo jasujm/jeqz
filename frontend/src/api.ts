@@ -3,6 +3,9 @@ import axios from "axios";
 export type Equation = {
   name?: string;
   markup: string;
+  wikipediaId?: string;
+  wikipediaTimestamp?: string;
+  retrievedAt?: string;
 };
 
 export type Choice = {

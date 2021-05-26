@@ -39,6 +39,7 @@ export class Quiz extends TimestampModel {
       throw new Error(`Quiz ${this.id} has unanswered question`);
     }
     const randomEquations = await Equation.query()
+      .modify("defaultSelect")
       .orderByRaw("random()")
       .limit(nChoices);
     const correctEquationId = _.sample(randomEquations)?.id;

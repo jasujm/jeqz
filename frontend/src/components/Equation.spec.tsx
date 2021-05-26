@@ -1,18 +1,27 @@
 import React from "react";
-import { render } from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
 import Equation from "./Equation";
 import { expect } from "../test/helpers";
+import _ from "lodash";
 
-const name = "Test equation";
-const props = { markup: "a + b = c" };
+const equation = {
+  name: "Test equation",
+  markup: "a + b = c",
+  wikipediaId: "12345",
+  wikipediaTimestamp: "2021-01-01",
+  retrievedAt: "2021-02-01",
+};
 
 describe("Equation", () => {
-  it("should contain name if provided", () => {
-    render(<Equation name={name} {...props} />);
-    expect(document.querySelector(".equation")).to.contain.text(name);
+  it("should contain citation with all parameters present", () => {
+    render(<Equation equation={equation} />);
+    expect(screen.getByRole("link"))
+      .to.have.text(equation.name)
+      .and.to.have.attr("href")
+      .that.contains(equation.wikipediaId);
   });
-  it("should not contain name if not provided", () => {
-    render(<Equation {...props} />);
-    expect(document.querySelector(".equation")).to.not.contain.text(name);
+  it("should not contain citation with citation parameters not present", () => {
+    render(<Equation equation={_.pick(equation, "markup")} />);
+    expect(screen.queryByText(equation.name)).not.to.exist;
   });
 });

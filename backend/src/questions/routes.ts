@@ -6,8 +6,10 @@ import _ from "lodash";
 const router = new Router({ prefix: "/questions" });
 
 function makeEquationResponse(equation: Equation, isAnswered: boolean) {
-  const keys = ["markup", ...(isAnswered ? ["name"] : [])];
-  return _.pick(equation, keys);
+  if (isAnswered) {
+    return equation;
+  }
+  return _.pick(equation, "markup");
 }
 
 function makeChoiceResponse(choice: Choice) {
@@ -45,7 +47,7 @@ export function makeQuestionResponse(
 router.get("question_details", "/:id", async (ctx) => {
   const question = await Question.query()
     .findById(ctx.params.id)
-    .withGraphFetched("choices(defaultOrder).[equation]");
+    .withGraphFetched("choices(defaultOrder).[equation(defaultSelect)]");
   if (question) {
     ctx.body = makeQuestionResponse(question);
   }

@@ -11,6 +11,8 @@ export async function seed(knex: Knex): Promise<void> {
         id: faker.datatype.uuid(),
         name: `${discoverer} equation`,
         markup: `a + b = c \\quad \\mathrm{${discoverer}}`,
+        wikipediaId: _.toString(faker.datatype.number()),
+        wikipediaTimestamp: faker.datatype.datetime().toISOString(),
       };
     })
   );
