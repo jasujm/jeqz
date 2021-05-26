@@ -5,7 +5,7 @@ import _ from "lodash";
 export async function seed(knex: Knex): Promise<void> {
   await knex("equations").del();
   await knex("equations").insert(
-    _.range(5).map((n) => {
+    _.range(10).map((n) => {
       const discoverer = faker.name.lastName();
       return {
         id: faker.datatype.uuid(),

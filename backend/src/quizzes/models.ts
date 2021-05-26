@@ -1,10 +1,11 @@
 import { Model, RelationMappings } from "objection";
 import { Choice, Question } from "../questions";
 import { Equation } from "../equations";
+import { TimestampModel } from "../db";
 import { v4 as uuidv4 } from "uuid";
 import _ from "lodash";
 
-export class Quiz extends Model {
+export class Quiz extends TimestampModel {
   id!: string;
   questions?: Question[];
 

@@ -1,6 +1,6 @@
-import { Model } from "objection";
+import { TimestampModel } from "../db";
 
-export class Equation extends Model {
+export class Equation extends TimestampModel {
   id!: string;
   name!: string;
   markup!: string;

@@ -1,8 +1,9 @@
 import { Model, RelationMappings, raw, QueryBuilder } from "objection";
 import { Quiz } from "../quizzes";
 import { Equation } from "../equations";
+import { TimestampModel } from "../db";
 
-export class Question extends Model {
+export class Question extends TimestampModel {
   id!: string;
   quizId!: string;
   rank!: number;

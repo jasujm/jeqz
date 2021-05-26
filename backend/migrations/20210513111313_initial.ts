@@ -5,15 +5,18 @@ export async function up(knex: Knex): Promise<void> {
     table.uuid("id").primary().notNullable();
     table.string("name").unique().notNullable();
     table.string("markup", 1023).notNullable();
+    table.timestamps(true, true);
   });
   await knex.schema.createTable("quizzes", (table) => {
     table.uuid("id").notNullable().primary();
+    table.timestamps(true, true);
   });
   await knex.schema.createTable("questions", (table) => {
     table.uuid("id").notNullable().primary();
     table.uuid("quizId").notNullable();
     table.integer("rank").notNullable();
     table.unique(["quizId", "rank"]);
+    table.timestamps(true, true);
   });
   await knex.schema.createTable("choices", (table) => {
     table.uuid("id").notNullable().primary();
