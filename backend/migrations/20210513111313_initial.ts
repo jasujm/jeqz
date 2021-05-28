@@ -7,18 +7,21 @@ export async function up(knex: Knex): Promise<void> {
     table.string("markup", 1023).notNullable();
     table.string("wikipediaId", 31).notNullable();
     table.dateTime("wikipediaTimestamp").notNullable();
-    table.timestamps(true, true);
+    table.timestamp("createdAt", { useTz: true }).notNullable().defaultTo(knex.fn.now());
+    table.timestamp("updatedAt", { useTz: true }).notNullable().defaultTo(knex.fn.now());
   });
   await knex.schema.createTable("quizzes", (table) => {
     table.uuid("id").notNullable().primary();
-    table.timestamps(true, true);
+    table.timestamp("createdAt", { useTz: true }).notNullable().defaultTo(knex.fn.now());
+    table.timestamp("updatedAt", { useTz: true }).notNullable().defaultTo(knex.fn.now());
   });
   await knex.schema.createTable("questions", (table) => {
     table.uuid("id").notNullable().primary();
     table.uuid("quizId").notNullable();
     table.integer("rank").notNullable();
     table.unique(["quizId", "rank"]);
-    table.timestamps(true, true);
+    table.timestamp("createdAt", { useTz: true }).notNullable().defaultTo(knex.fn.now());
+    table.timestamp("updatedAt", { useTz: true }).notNullable().defaultTo(knex.fn.now());
   });
   await knex.schema.createTable("choices", (table) => {
     table.uuid("id").notNullable().primary();

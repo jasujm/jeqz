@@ -17,7 +17,7 @@ export class Equation extends TimestampModel {
         "markup",
         "wikipediaId",
         "wikipediaTimestamp",
-        raw("coalesce(??, ??)", "updated_at", "created_at").as("retrievedAt")
+        raw("coalesce(??, ??)", "updatedAt", "createdAt").as("retrievedAt")
       );
     },
   };
