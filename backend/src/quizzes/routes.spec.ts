@@ -51,7 +51,7 @@ describe("quizzes/routes", () => {
       });
 
       it("should respond with the representation of the quiz", () => {
-        expect(res.body).to.deep.equal(quiz);
+        expect(res.body).to.have.property("id").that.equals(quiz.id);
       });
     });
 

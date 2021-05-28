@@ -47,8 +47,11 @@ export class Question extends TimestampModel {
   }
 
   static modifiers = {
-    defaultOrder(query: QueryBuilder<Question>): void {
-      query.orderBy("rank");
+    defaultSelect(query: QueryBuilder<Question>): void {
+      query
+        .select("id", "quizId")
+        .orderBy("rank")
+        .withGraphFetched("choices(defaultSelect)");
     },
   };
 
@@ -102,8 +105,11 @@ export class Choice extends Model {
   };
 
   static modifiers = {
-    defaultOrder(query: QueryBuilder<Choice>): void {
-      query.orderBy("id");
+    defaultSelect(query: QueryBuilder<Choice>): void {
+      query
+        .select("id", "questionId", "equationId", "isCorrect", "isSelected")
+        .orderBy("id")
+        .withGraphFetched("equation(defaultSelect)");
     },
   };
 }

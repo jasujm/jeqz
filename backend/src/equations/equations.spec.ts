@@ -7,7 +7,7 @@ describe("equations", () => {
   let equations!: Equation[];
 
   beforeAll(async () => {
-    equations = await Equation.query();
+    equations = await Equation.query().modify("defaultSelect");
   });
 
   describe("index", () => {

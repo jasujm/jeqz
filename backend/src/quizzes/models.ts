@@ -1,4 +1,4 @@
-import { Model, RelationMappings } from "objection";
+import { Model, RelationMappings, QueryBuilder } from "objection";
 import { Choice, Question } from "../questions";
 import { Equation } from "../equations";
 import { TimestampModel } from "../db";
@@ -23,6 +23,11 @@ export class Quiz extends TimestampModel {
       },
     };
   }
+  static modifiers = {
+    defaultSelect(query: QueryBuilder<Quiz>): void {
+      query.select("id");
+    },
+  };
 
   static create(): Promise<Quiz> {
     return Quiz.query().insert({

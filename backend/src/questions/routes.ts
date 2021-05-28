@@ -47,12 +47,11 @@ export function makeQuestionResponse(
 router.get("question_details", "/:id", async (ctx) => {
   const question = await Question.query()
     .findById(ctx.params.id)
-    .withGraphFetched("choices(defaultOrder).[equation(defaultSelect)]");
+    .modify("defaultSelect");
   if (question) {
     ctx.body = makeQuestionResponse(question);
   }
 });
-
 router.post("question_answer", "/:id/answer", async (ctx) => {
   const question = await Question.query().findById(ctx.params.id);
   if (!question) {
