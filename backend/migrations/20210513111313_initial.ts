@@ -19,9 +19,9 @@ export async function up(knex: Knex): Promise<void> {
     table.uuid("id").notNullable().primary();
     table.uuid("quizId").notNullable();
     table.integer("rank").notNullable();
-    table.unique(["quizId", "rank"]);
     table.timestamp("createdAt", { useTz: true }).notNullable().defaultTo(knex.fn.now());
     table.timestamp("updatedAt", { useTz: true }).notNullable().defaultTo(knex.fn.now());
+    table.unique(["quizId", "rank"]);
   });
   await knex.schema.createTable("choices", (table) => {
     table.uuid("id").notNullable().primary();
@@ -29,6 +29,8 @@ export async function up(knex: Knex): Promise<void> {
     table.uuid("equationId").notNullable();
     table.boolean("isCorrect").notNullable();
     table.boolean("isSelected").nullable();
+    table.timestamp("createdAt", { useTz: true }).notNullable().defaultTo(knex.fn.now());
+    table.timestamp("updatedAt", { useTz: true }).notNullable().defaultTo(knex.fn.now());
     table.unique(["questionId", "equationId"]);
   });
 }

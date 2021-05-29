@@ -42,6 +42,7 @@ describe("quizzes/models", () => {
           await question
             .$relatedQuery("choices")
             .modify("defaultSelect")
+            .select(["createdAt", "updatedAt"])
             .withGraphFetched("equation")
         ).map((choice) => ({
           ...choice,

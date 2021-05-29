@@ -74,7 +74,7 @@ export class Question extends TimestampModel {
   }
 }
 
-export class Choice extends Model {
+export class Choice extends TimestampModel {
   id!: string;
   questionId!: string;
   equationId!: string;
