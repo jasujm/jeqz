@@ -30,12 +30,17 @@ export type Quiz = {
 };
 
 const client = axios.create({
-  baseURL: "http://localhost:3030",
+  baseURL: "http://localhost:3030/api/v1",
   timeout: 1000,
 });
 
 export async function createQuiz() {
   const response = await client.post("/quizzes");
+  return response.data as Quiz;
+}
+
+export async function getQuiz(quizId: string) {
+  const response = await client.get(`/quizzes/${quizId}`);
   return response.data as Quiz;
 }
 

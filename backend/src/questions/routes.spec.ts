@@ -6,12 +6,12 @@ import app from "../app";
 import _ from "lodash";
 
 function getQuestion(questionId: string) {
-  return request(app.callback()).get(`/questions/${questionId}`);
+  return request(app.callback()).get(`/api/v1/questions/${questionId}`);
 }
 
 function answerQuestion(questionId: string, choiceId: string) {
   return request(app.callback())
-    .put(`/questions/${questionId}/answer`)
+    .put(`/api/v1/questions/${questionId}/answer`)
     .send({ choiceId });
 }
 
@@ -76,13 +76,15 @@ describe("questions/routes", () => {
   });
 
   it("should respond with 404 when answering a question that does not exist", async () => {
-    const res = await request(app.callback()).put("/questions/fake/answer");
+    const res = await request(app.callback()).put(
+      "/api/v1/questions/fake/answer"
+    );
     expect(res).to.have.status(404);
   });
 
   it("should respond with 422 when answering with malformed request", async () => {
     const res = await request(app.callback()).put(
-      `/questions/${question.id}/answer`
+      `/api/v1/questions/${question.id}/answer`
     );
     expect(res).to.have.status(422);
   });

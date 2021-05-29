@@ -8,6 +8,13 @@ import { question } from "./Question.spec";
 
 const quizId = "c532b5ce-aa11-4733-b43f-b26bc94168b6";
 
+const conflictError = {
+  isAxiosError: true,
+  response: {
+    status: 409,
+  },
+};
+
 describe("Quiz", () => {
   let createQuestion!: SinonStub;
   let getQuizQuestions!: SinonStub;
@@ -106,5 +113,26 @@ describe("Quiz", () => {
         expect(screen.getByText("Question 2")).to.exist;
       });
     });
+
+    it("should refresh if next question fails with conflict", async () => {
+      createQuestion.rejects(conflictError);
+      getQuizQuestions.resetHistory();
+      const button = screen.getByRole("button");
+      await act(async () => {
+        fireEvent.click(button);
+      });
+      expect(getQuizQuestions).to.have.been.calledOnceWith(quizId);
+    });
+  });
+
+  it("should refresh if answering question fails with conflict", async () => {
+    answerQuestion.rejects(conflictError);
+    const choice = question.choices[0];
+    const input = screen.getByLabelText(choice.label);
+    getQuizQuestions.resetHistory();
+    await act(async () => {
+      fireEvent.click(input);
+    });
+    expect(getQuizQuestions).to.have.been.calledOnceWith(quizId);
   });
 });

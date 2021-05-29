@@ -11,6 +11,7 @@ import {
 import { Button } from "react-bootstrap";
 import _ from "lodash";
 import "./Quiz.scss";
+import { AxiosError } from "axios";
 
 export type QuizProps = {
   quiz: ApiQuiz;
@@ -18,6 +19,26 @@ export type QuizProps = {
 
 export default function Quiz({ quiz }: QuizProps) {
   const [questions, setQuestions] = React.useState<ApiQuestion[]>([]);
+
+  async function refresh() {
+    try {
+      const questions = await getQuizQuestions(quiz.id);
+      setQuestions(
+        _.isEmpty(questions) ? [await createQuestion(quiz.id)] : questions
+      );
+    } catch (err) {
+      console.error(err);
+    }
+  }
+
+  async function handleError(err: Error) {
+    const axiosError = err as AxiosError;
+    if (axiosError.isAxiosError && axiosError.response?.status === 409) {
+      refresh();
+    } else {
+      console.error(err);
+    }
+  }
 
   async function postAnswer(choiceId: string) {
     const question = _.last(questions);
@@ -27,7 +48,7 @@ export default function Quiz({ quiz }: QuizProps) {
         const currentQuestion = await getQuestion(question.id);
         setQuestions([..._.dropRight(questions), currentQuestion]);
       } catch (err) {
-        console.error(err);
+        handleError(err);
       }
     }
   }
@@ -37,23 +58,13 @@ export default function Quiz({ quiz }: QuizProps) {
       const question = await createQuestion(quiz.id);
       setQuestions([...questions, question]);
     } catch (err) {
-      console.error(err);
+      handleError(err);
     }
   }
 
   useEffect(() => {
-    async function refresh() {
-      try {
-        const questions = await getQuizQuestions(quiz.id);
-        setQuestions(
-          _.isEmpty(questions) ? [await createQuestion(quiz.id)] : questions
-        );
-      } catch (err) {
-        console.error(err);
-      }
-    }
     void refresh();
-  }, [quiz.id]);
+  }, [quiz.id]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const question = _.last(questions);
   if (question) {

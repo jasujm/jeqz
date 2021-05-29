@@ -1,18 +1,22 @@
-import React, { useEffect } from "react";
+import React from "react";
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import "./App.scss";
-import Quiz from "./components/Quiz";
-import { createQuiz, Quiz as ApiQuiz } from "./api";
+import HomeView from "./views/HomeView";
+import QuizView from "./views/QuizView";
 
 export default function App() {
-  const [quiz, setQuiz] = React.useState<ApiQuiz | null>(null);
-
-  useEffect(() => {
-    void createQuiz().then(setQuiz).catch(console.error);
-  }, []);
-
   return (
-    <div className="app">
-      {quiz ? <Quiz quiz={quiz} /> : <span>Creating quiz...</span>}
-    </div>
+    <Router>
+      <div className="app">
+        <Switch>
+          <Route path="/quizzes/:id">
+            <QuizView />
+          </Route>
+          <Route path="/">
+            <HomeView />
+          </Route>
+        </Switch>
+      </div>
+    </Router>
   );
 }

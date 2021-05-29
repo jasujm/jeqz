@@ -11,7 +11,7 @@ describe("quizzes/routes", () => {
     let quizId!: string;
 
     beforeAll(async () => {
-      res = await request(app.callback()).post("/quizzes");
+      res = await request(app.callback()).post("/api/v1/quizzes");
       quizId = res.body.id;
     });
 
@@ -43,7 +43,7 @@ describe("quizzes/routes", () => {
       let res!: ChaiHttp.Response;
 
       beforeEach(async () => {
-        res = await request(app.callback()).get(`/quizzes/${quiz.id}`);
+        res = await request(app.callback()).get(`/api/v1/quizzes/${quiz.id}`);
       });
 
       it("should respond with status 200", () => {
@@ -60,7 +60,7 @@ describe("quizzes/routes", () => {
 
       beforeEach(async () => {
         res = await request(app.callback()).get(
-          `/quizzes/${quiz.id}/questions`
+          `/api/v1/quizzes/${quiz.id}/questions`
         );
       });
 
@@ -83,7 +83,7 @@ describe("quizzes/routes", () => {
         beforeEach(async () => {
           await question.answer(choice.id);
           res = await request(app.callback()).post(
-            `/quizzes/${quiz.id}/questions`
+            `/api/v1/quizzes/${quiz.id}/questions`
           );
         });
 
@@ -102,7 +102,7 @@ describe("quizzes/routes", () => {
 
       it("should respond with 409 if the previous question is not answered", async () => {
         const res = await request(app.callback()).post(
-          `/quizzes/${quiz.id}/questions`
+          `/api/v1/quizzes/${quiz.id}/questions`
         );
         expect(res).to.have.status(409);
       });

@@ -12,7 +12,7 @@ describe("equations", () => {
 
   describe("index", () => {
     it("should list all equations", async () => {
-      const res = await request(app.callback()).get("/equations");
+      const res = await request(app.callback()).get("/api/v1/equations");
       expect(res).to.have.status(200).and.to.be.json;
       expect(res.body).to.deep.equal(equations);
     });
@@ -22,7 +22,7 @@ describe("equations", () => {
     it("should read a single equation", async () => {
       const equation = equations[0];
       const res = await request(app.callback()).get(
-        `/equations/${equation.id}`
+        `/api/v1/equations/${equation.id}`
       );
       expect(res).to.have.status(200).and.to.be.json;
       expect(res.body).to.deep.equal(equation);
