@@ -29,8 +29,8 @@ constexpr auto TEXT_TAG = "text"sv;
 constexpr auto BYTES_ATTR = "bytes"sv;
 constexpr auto TIMESTAMP_TAG = "timestamp"sv;
 
-const auto TITLE_REGEX = Regex {R"((.*) equation)"};
-const auto EQUATION_REGEX = Regex {R"(\n:*\s*<math.*?>(.+?)\\?[,.]?\s*</math>\n)"};
+const auto TITLE_REGEX = Regex {R"(^(.*) equation$)"};
+const auto EQUATION_REGEX = Regex {R"(\n:*\s*<math.*?>((.+?)=(.+?))\\?[,.]?\s*</math>\n)"};
 
 bool contains(const StringView s, const StringView needle)
 {
