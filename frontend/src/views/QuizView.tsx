@@ -6,7 +6,7 @@ import _ from "lodash";
 import { AxiosError } from "axios";
 import { Alert } from "react-bootstrap";
 
-class NotFound {}
+class NotFound { }
 
 export default function QuizView() {
   const { id } = _.pick(useParams(), "id") as Record<"id", string>;
@@ -32,7 +32,11 @@ export default function QuizView() {
   if (quiz instanceof NotFound) {
     return <Alert variant="warning">Quiz not found</Alert>;
   } else if (quiz !== null) {
-    return <Quiz quiz={quiz} />;
+    return (
+      <article>
+        <Quiz quiz={quiz} />
+      </article>
+    );
   }
 
   return <span>Loading quiz...</span>;

@@ -81,7 +81,7 @@ export default function Quiz({ quiz }: QuizProps) {
 
     return (
       <div className="quiz">
-        <span className="question-counter">Question {questions.length}</span>
+        <h2>Question {questions.length}</h2>
         <Question onAnswer={postAnswer} question={question} />
         <Button
           variant="primary"

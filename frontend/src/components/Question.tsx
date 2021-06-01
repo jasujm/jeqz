@@ -28,7 +28,7 @@ export default function Question({
 }: QuestionProps) {
   return (
     <div className="question">
-      <h2>What is this equation?</h2>
+      <p>What is this equation?</p>
       {equation ? (
         <Equation equation={equation} />
       ) : (

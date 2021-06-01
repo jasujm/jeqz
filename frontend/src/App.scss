@@ -3,7 +3,17 @@
 .app {
   min-height: 100vh;
   display: flex;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
+  flex-flow: column;
+
+  nav {
+    flex: 0 1 auto;
+  }
+
+  main {
+    display: flex;
+    flex: 1 1 auto;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+  }
 }

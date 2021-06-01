@@ -18,14 +18,18 @@ export default function HomeView() {
 
   return (
     <div className="home">
-      <Image
-        className="mb-2"
-        src={sheldon}
-        alt="Sheldon Cooper: Ready to start an equation quiz? It's going to be fun!"
-      />
-      <Button variant="primary" block onClick={startQuiz}>
-        Start quiz
-      </Button>
+      <article>
+        <h2>Welcome to Jaakko’s equation quiz!</h2>
+        <p>
+          <Image
+            src={sheldon}
+            alt="Sheldon Cooper: Ready to start an equation quiz? It's going to be fun!"
+          />
+        </p>
+        <Button variant="primary" block onClick={startQuiz}>
+          Start quiz
+        </Button>
+      </article>
     </div>
   );
 }
