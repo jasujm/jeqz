@@ -6,7 +6,7 @@ import _ from "lodash";
 import { AxiosError } from "axios";
 import { Alert } from "react-bootstrap";
 
-class NotFound { }
+class NotFound {}
 
 export default function QuizView() {
   const { id } = _.pick(useParams(), "id") as Record<"id", string>;

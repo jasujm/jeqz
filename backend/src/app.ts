@@ -9,8 +9,6 @@ import { router as questionsRouter } from "./questions";
 
 import "./db";
 
-const isDevelopment = process.env.NODE_ENV === "development";
-
 const router = new Router({ prefix: "/api/v1" });
 
 router
@@ -23,8 +21,9 @@ router
 
 const app = new Koa();
 
-if (isDevelopment) {
-  app.use(cors({ origin: "http://localhost:3000" }));
+const allowOrigin = process.env.JEQZ_ALLOW_ORIGIN;
+if (allowOrigin) {
+  app.use(cors({ origin: allowOrigin }));
 }
 
 app.use(bodyParser()).use(router.routes()).use(router.allowedMethods());

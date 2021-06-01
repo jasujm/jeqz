@@ -1,8 +1,14 @@
 // Update with your config settings.
 
-function sqlite3Config(filename: string) {
+function pgConfig() {
   return {
-    client: 'sqlite3',
+    connection: process.env.JEQZ_DATABASE_URL,
+  }
+}
+
+function sqlite3Config() {
+  const filename = process.env.JEQZ_SQLITE3_FILENAME || ":memory:";
+  return {
     useNullAsDefault: true,
     connection: {
       filename,
@@ -10,20 +16,13 @@ function sqlite3Config(filename: string) {
   }
 }
 
-export default {
-  development: sqlite3Config('./tmp/db.sqlite3'),
-  test: sqlite3Config(':memory:'),
-  production: {
-    client: 'postgresql',
-    connection: {
-      database: 'my_db',
-      user: 'username',
-      password: 'password'
-    },
-    pool: {
-      min: 2,
-      max: 10
-    },
+export default (function() {
+  const client = process.env.JEQZ_DATABASE_CLIENT || "sqlite3";
+  if (client) {
+    return {
+      client: client,
+      ...(client === "pg" ? pgConfig() : sqlite3Config()),
+    }
   }
-
-};
+  process.exit(1);
+})();

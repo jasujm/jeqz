@@ -1,10 +1,8 @@
 import Knex from "knex";
 import { Model } from "objection";
-import config from "../knexfile";
+import knexConfig from "../knexfile";
 
-const knex = Knex(
-  config[(process.env.NODE_ENV || "production") as keyof typeof config]
-);
+const knex = Knex(knexConfig);
 
 Model.knex(knex);
 

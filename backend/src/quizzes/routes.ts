@@ -1,6 +1,7 @@
 import Router from "@koa/router";
 import { Quiz } from "./models";
 import { router as questionRouter, makeQuestionResponse } from "../questions";
+import { getUrl } from "../utils";
 import _ from "lodash";
 
 const router = new Router({ prefix: "/quizzes" });
@@ -12,7 +13,7 @@ function makeQuizResponse(quiz: Quiz) {
 router.post("quizzes", "/", async (ctx) => {
   const quiz = await Quiz.create();
   ctx.status = 201;
-  ctx.set("Location", router.url("quiz_details", { id: quiz.id }));
+  ctx.set("Location", getUrl(router.url("quiz_details", { id: quiz.id })));
   ctx.body = makeQuizResponse(quiz);
 });
 
@@ -44,7 +45,7 @@ router.post("quiz_questions_create", "/:id/questions", async (ctx) => {
     ctx.status = 201;
     ctx.set(
       "Location",
-      questionRouter.url("question_details", { id: question.id })
+      getUrl(questionRouter.url("question_details", { id: question.id }))
     );
     ctx.body = makeQuestionResponse(question);
   } catch (err) {
