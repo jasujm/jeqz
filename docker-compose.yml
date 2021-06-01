@@ -1,0 +1,40 @@
+version: "3"
+services:
+  traefik:
+    image: "traefik:v2.4"
+    command:
+    - "--providers.docker=true"
+    - "--providers.docker.exposedbydefault=false"
+    - "--entrypoints.web.address=:80"
+    ports:
+    - "80:80"
+    volumes:
+    - "/var/run/docker.sock:/var/run/docker.sock:ro"
+  frontend:
+    image: "jasujm/jeqz-frontend"
+    build: "frontend/"
+    labels:
+    - "traefik.enable=true"
+    - "traefik.http.routers.frontend.entrypoints=web"
+    - "traefik.http.routers.frontend.rule=PathPrefix(`/`)"
+  backend:
+    image: "jasujm/jeqz-backend"
+    build: "backend/"
+    environment:
+    - "JEQZ_DATABASE_CLIENT=pg"
+    env_file:
+    - "./.env.backend"
+    labels:
+    - "traefik.enable=true"
+    - "traefik.http.routers.backend.entrypoints=web"
+    - "traefik.http.routers.backend.rule=PathPrefix(`/api/v1`)"
+    depends_on:
+    - "db"
+  db:
+    image: "postgres:13"
+    volumes:
+    - "dbdata:/var/lib/postgresql/data:rw"
+    env_file:
+    - "./.env.db"
+volumes:
+  dbdata:

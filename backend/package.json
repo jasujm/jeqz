@@ -4,8 +4,8 @@
   "description": "Jaakko's equation quiz backend",
   "private": true,
   "scripts": {
-    "start": "ts-node server",
-    "dev:start": "nodemon --watch 'src/**' --ext 'ts' --ignore '*.spec.ts' --exec 'ts-node server'",
+    "build": "tsc",
+    "start": "nodemon --watch 'src/**' --ext 'ts' --ignore '*.spec.ts' --exec 'ts-node server'",
     "lint": "eslint src/",
     "test": "jest",
     "format": "prettier -w src"

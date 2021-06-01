@@ -30,7 +30,7 @@ export type Quiz = {
 };
 
 const apiOrigin =
-  process.env.JEQZ_API_ORIGIN ||
+  process.env.REACT_APP_JEQZ_API_ORIGIN ||
   (process.env.NODE_ENV === "development" ? "http://localhost:3030" : "");
 const client = axios.create({
   baseURL: `${apiOrigin}/api/v1`,
