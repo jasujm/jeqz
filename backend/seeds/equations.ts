@@ -9,7 +9,7 @@ export async function seed(knex: Knex): Promise<void> {
       const discoverer = faker.name.lastName();
       return {
         id: faker.datatype.uuid(),
-        name: `${discoverer} equation`,
+        name: `${discoverer} equation #${n}`,
         markup: `a + b = c \\quad \\mathrm{${discoverer}}`,
         wikipediaId: _.toString(faker.datatype.number()),
         wikipediaTimestamp: faker.datatype.datetime().toISOString(),
