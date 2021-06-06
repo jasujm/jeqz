@@ -2,7 +2,7 @@ import React from "react";
 import { render, screen } from "@testing-library/react";
 import Equation from "./Equation";
 import { expect } from "../test/helpers";
-import _ from "lodash";
+import pick from "lodash/pick";
 
 const equation = {
   name: "Test equation",
@@ -21,7 +21,7 @@ describe("Equation", () => {
       .that.contains(equation.wikipediaId);
   });
   it("should not contain citation with citation parameters not present", () => {
-    render(<Equation equation={_.pick(equation, "markup")} />);
+    render(<Equation equation={pick(equation, "markup")} />);
     expect(screen.queryByText(equation.name)).not.to.exist;
   });
 });

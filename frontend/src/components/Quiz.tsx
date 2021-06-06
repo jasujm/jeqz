@@ -8,8 +8,11 @@ import {
   getQuizQuestions,
   getQuestion,
 } from "../api";
-import { Button } from "react-bootstrap";
-import _ from "lodash";
+import Button from "react-bootstrap/Button";
+import isEmpty from "lodash/isEmpty";
+import last from "lodash/last";
+import dropRight from "lodash/dropRight";
+import countBy from "lodash/countBy";
 import "./Quiz.scss";
 import { AxiosError } from "axios";
 
@@ -24,7 +27,7 @@ export default function Quiz({ quiz }: QuizProps) {
     try {
       const questions = await getQuizQuestions(quiz.id);
       setQuestions(
-        _.isEmpty(questions) ? [await createQuestion(quiz.id)] : questions
+        isEmpty(questions) ? [await createQuestion(quiz.id)] : questions
       );
     } catch (err) {
       console.error(err);
@@ -41,12 +44,12 @@ export default function Quiz({ quiz }: QuizProps) {
   }
 
   async function postAnswer(choiceId: string) {
-    const question = _.last(questions);
+    const question = last(questions);
     if (question) {
       try {
         await answerQuestion(question.id, choiceId);
         const currentQuestion = await getQuestion(question.id);
-        setQuestions([..._.dropRight(questions), currentQuestion]);
+        setQuestions([...dropRight(questions), currentQuestion]);
       } catch (err) {
         handleError(err);
       }
@@ -66,9 +69,9 @@ export default function Quiz({ quiz }: QuizProps) {
     void refresh();
   }, [quiz.id]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  const question = _.last(questions);
+  const question = last(questions);
   if (question) {
-    const answersByCorrectness = _.countBy(
+    const answersByCorrectness = countBy(
       questions,
       (question) =>
         question.answer &&

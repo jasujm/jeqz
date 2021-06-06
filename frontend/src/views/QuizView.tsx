@@ -2,14 +2,14 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import Quiz from "../components/Quiz";
 import { getQuiz, Quiz as ApiQuiz } from "../api";
-import _ from "lodash";
+import pick from "lodash/pick";
 import { AxiosError } from "axios";
-import { Alert } from "react-bootstrap";
+import Alert from "react-bootstrap/Alert";
 
-class NotFound {}
+class NotFound { }
 
 export default function QuizView() {
-  const { id } = _.pick(useParams(), "id") as Record<"id", string>;
+  const { id } = pick(useParams(), "id") as Record<"id", string>;
   const [quiz, setQuiz] = useState<null | ApiQuiz | NotFound>(null);
 
   useEffect(() => {

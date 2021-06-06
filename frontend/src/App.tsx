@@ -4,7 +4,8 @@ import "./App.scss";
 import HomeView from "./views/HomeView";
 import QuizView from "./views/QuizView";
 import AboutView from "./views/AboutView";
-import { Navbar, Nav } from "react-bootstrap";
+import Navbar from "react-bootstrap/Navbar";
+import Nav from "react-bootstrap/Nav";
 
 export default function App() {
   return (

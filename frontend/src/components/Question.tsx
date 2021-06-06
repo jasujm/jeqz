@@ -1,6 +1,6 @@
 import React from "react";
 import Equation from "./Equation";
-import { Form } from "react-bootstrap";
+import Form from "react-bootstrap/Form";
 import "./Question.scss";
 import classnames from "classnames";
 import { Question as ApiQuestion, Choice, Answer } from "../api";

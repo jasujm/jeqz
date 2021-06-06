@@ -2,7 +2,8 @@ import React from "react";
 import { useHistory } from "react-router-dom";
 import { createQuiz } from "../api";
 import sheldon from "../assets/img/sheldon.jpg";
-import { Image, Button } from "react-bootstrap";
+import Image from "react-bootstrap/Image";
+import Button from "react-bootstrap/Button";
 
 export default function HomeView() {
   const history = useHistory();
@@ -24,6 +25,7 @@ export default function HomeView() {
           <Image
             src={sheldon}
             alt="Sheldon Cooper: Ready to start an equation quiz? It's going to be fun!"
+            fluid
           />
         </p>
         <Button variant="primary" block onClick={startQuiz}>
