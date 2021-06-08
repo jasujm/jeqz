@@ -3,20 +3,28 @@ services:
   traefik:
     image: "traefik:v2.4"
     command:
+    - "--providers.file.directory=/etc/jeqz"
     - "--providers.docker=true"
     - "--providers.docker.exposedbydefault=false"
     - "--entrypoints.web.address=:80"
+    - "--entrypoints.web.http.redirections.entrypoint.to=websecure"
+    - "--entrypoints.web.http.redirections.entrypoint.scheme=https"
+    - "--entrypoints.websecure.address=:443"
     ports:
     - "80:80"
+    - "443:443"
     volumes:
     - "/var/run/docker.sock:/var/run/docker.sock:ro"
+    - "./traefik/traefik.toml:/etc/jeqz/traefik.toml:ro"
   frontend:
     image: "jasujm/jeqz-frontend"
     build: "frontend/"
     labels:
     - "traefik.enable=true"
-    - "traefik.http.routers.frontend.entrypoints=web"
+    - "traefik.http.routers.frontend.tls=true"
+    - "traefik.http.routers.frontend.entrypoints=websecure"
     - "traefik.http.routers.frontend.rule=PathPrefix(`/`)"
+    - "traefik.http.routers.frontend.middlewares=securityheaders@file"
   backend:
     image: "jasujm/jeqz-backend"
     build: "backend/"
@@ -26,8 +34,10 @@ services:
     - "./.env.backend"
     labels:
     - "traefik.enable=true"
-    - "traefik.http.routers.backend.entrypoints=web"
+    - "traefik.http.routers.backend.tls=true"
+    - "traefik.http.routers.backend.entrypoints=websecure"
     - "traefik.http.routers.backend.rule=PathPrefix(`/api/v1`)"
+    - "traefik.http.routers.backend.middlewares=securityheaders@file"
     depends_on:
     - "db"
   db:
