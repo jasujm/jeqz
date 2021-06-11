@@ -83,9 +83,16 @@ describe("questions/routes", () => {
   });
 
   it("should respond with 422 when answering with malformed request", async () => {
-    const res = await request(app.callback()).put(
-      `/api/v1/questions/${question.id}/answer`
-    );
+    const res = await request(app.callback())
+      .put(`/api/v1/questions/${question.id}/answer`)
+      .send("malformed");
+    expect(res).to.have.status(422);
+  });
+
+  it("should respond with 422 when answering with empty request", async () => {
+    const res = await request(app.callback())
+      .put(`/api/v1/questions/${question.id}/answer`)
+      .send({});
     expect(res).to.have.status(422);
   });
 });

@@ -77,6 +77,11 @@ router.put("question_answer_update", "/:id/answer", async (ctx) => {
   if (!question) {
     return;
   }
+  if (typeof ctx.request.body === "string") {
+    ctx.body = "Invalid body format";
+    ctx.status = 422;
+    return;
+  }
   const choiceId = ctx.request.body?.choiceId;
   if (typeof choiceId !== "string") {
     ctx.body = "Invalid answer";
